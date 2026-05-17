@@ -10,7 +10,7 @@ description: >-
   publish a public developer API portal; integrations and data exchanges are
   handled through partner programs and the EA Help support and account
   surfaces.
-type: Contract
+kind: contract
 position: Consumer
 access: 3rd-Party
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
