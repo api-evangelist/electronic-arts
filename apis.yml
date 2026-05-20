@@ -52,6 +52,8 @@ maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/electronic-arts
   - name: Electronic Arts Website
     url: https://www.ea.com
     type: Website
