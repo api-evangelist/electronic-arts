@@ -1,0 +1,746 @@
+"""
+Electronic Arts GraphQL Schema
+Conceptual schema modelling EA's player services, game catalog, storefront,
+achievements, leaderboards, match history, and FIFA Ultimate Team surfaces.
+Source: EA app (Origin), EA SPORTS FC / FUT APIs, public research.
+"""
+
+# ─── Scalars ──────────────────────────────────────────────────────────────────
+
+scalar DateTime
+scalar JSON
+scalar URL
+
+# ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum FriendStatus {
+  PENDING
+  ACCEPTED
+  BLOCKED
+  DECLINED
+}
+
+enum PresenceState {
+  ONLINE
+  OFFLINE
+  AWAY
+  IN_GAME
+  DO_NOT_DISTURB
+}
+
+enum GamePlatform {
+  PC
+  PS4
+  PS5
+  XBOX_ONE
+  XBOX_SERIES_X
+  XBOX_SERIES_S
+  NINTENDO_SWITCH
+  MOBILE_IOS
+  MOBILE_ANDROID
+}
+
+enum GameStatus {
+  RELEASED
+  EARLY_ACCESS
+  BETA
+  COMING_SOON
+  LEGACY
+  DELISTED
+}
+
+enum EntitlementType {
+  BASE_GAME
+  DLC
+  EXPANSION
+  PACK
+  BUNDLE
+  SUBSCRIPTION
+  IN_GAME_CURRENCY
+  COSMETIC
+}
+
+enum Currency {
+  USD
+  EUR
+  GBP
+  CAD
+  AUD
+  BRL
+  MXN
+  EA_COINS
+  FC_POINTS
+}
+
+enum MatchResult {
+  WIN
+  LOSS
+  DRAW
+  ABANDONED
+  FORFEIT
+}
+
+enum TokenType {
+  ACCESS_TOKEN
+  REFRESH_TOKEN
+  ID_TOKEN
+}
+
+# ─── Player Identity ───────────────────────────────────────────────────────────
+
+"""Canonical EA account identifier (Nucleus ID layer)"""
+type NucleusID {
+  id: ID!
+  createdAt: DateTime!
+  verifiedEmail: Boolean!
+}
+
+"""EA ID — the consumer-visible username for the EA app / Origin"""
+type EAID {
+  id: ID!
+  displayName: String!
+  tag: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Low-level player record linking Nucleus ID to EA ID"""
+type PlayerID {
+  nucleusId: NucleusID!
+  eaId: EAID!
+  externalIds: [String]
+}
+
+"""Origin / EA app account surface"""
+type OriginAccount {
+  pid: ID!
+  email: String
+  country: String
+  language: String
+  dateOfBirth: String
+  eaId: EAID!
+  nucleusId: NucleusID!
+  createdAt: DateTime!
+  lastLoginAt: DateTime
+}
+
+"""Unified EA player entity"""
+type EAPlayer {
+  id: ID!
+  playerIds: PlayerID!
+  originAccount: OriginAccount
+  profile: PlayerProfile
+  friends: FriendList
+  presence: Presence
+  ownedGames: [OwnedGame]
+  purchaseHistory: PurchaseHistory
+  achievements: [Achievement]
+  stats: [PlayerStats]
+  matchHistory: MatchHistory
+}
+
+"""Public-facing player profile"""
+type PlayerProfile {
+  playerId: ID!
+  displayName: String!
+  avatar: URL
+  bio: String
+  country: String
+  language: String
+  joinedAt: DateTime!
+  publicProfile: Boolean!
+  socialLinks: [String]
+}
+
+"""Top-level player query node"""
+type Player {
+  id: ID!
+  eaPlayer: EAPlayer!
+  profile: PlayerProfile!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─── Social & Presence ────────────────────────────────────────────────────────
+
+"""Real-time presence status of a player"""
+type Presence {
+  playerId: ID!
+  state: PresenceState!
+  currentGame: GameTitle
+  richPresence: String
+  lastSeenAt: DateTime
+  platform: GamePlatform
+}
+
+"""A single friend relationship"""
+type Friend {
+  id: ID!
+  player: Player!
+  status: FriendStatus!
+  since: DateTime
+  mutualFriends: Int
+}
+
+"""Paginated friend list"""
+type FriendList {
+  ownerId: ID!
+  friends: [Friend!]!
+  totalCount: Int!
+  pendingCount: Int!
+}
+
+# ─── Game Catalog ─────────────────────────────────────────────────────────────
+
+"""Short game title reference (used in presence, entitlements, etc.)"""
+type GameTitle {
+  id: ID!
+  name: String!
+  slug: String!
+  franchise: String
+}
+
+"""A specific release of a game (edition/version)"""
+type GameRelease {
+  id: ID!
+  title: GameTitle!
+  edition: String
+  releaseDate: DateTime
+  platforms: [GamePlatform!]!
+  ageRating: String
+}
+
+"""Full game entity"""
+type Game {
+  id: ID!
+  title: GameTitle!
+  releases: [GameRelease!]!
+  status: GameStatus!
+  description: String
+  coverImage: URL
+  genres: [String]
+  developer: String
+  publisher: String
+  website: URL
+  trailerUrl: URL
+  franchise: String
+  tags: [String]
+}
+
+"""A game that a player owns / has access to"""
+type OwnedGame {
+  id: ID!
+  game: Game!
+  entitlement: Entitlement!
+  platform: GamePlatform!
+  acquiredAt: DateTime!
+  lastPlayedAt: DateTime
+  totalPlaytimeMinutes: Int
+}
+
+# ─── Entitlements ─────────────────────────────────────────────────────────────
+
+"""A content entitlement granted to a player"""
+type Entitlement {
+  id: ID!
+  playerId: ID!
+  type: EntitlementType!
+  offerId: String!
+  offerName: String!
+  status: String
+  grantedAt: DateTime!
+  expiresAt: DateTime
+  platform: GamePlatform
+}
+
+"""Downloadable content add-on"""
+type DLC {
+  id: ID!
+  parentGame: GameTitle!
+  name: String!
+  description: String
+  type: EntitlementType!
+  price: Price
+  coverImage: URL
+  releaseDate: DateTime
+}
+
+"""A major game expansion"""
+type Expansion {
+  id: ID!
+  parentGame: GameTitle!
+  name: String!
+  description: String
+  price: Price
+  coverImage: URL
+  releaseDate: DateTime
+  includedDLC: [DLC]
+}
+
+"""A small content pack (cosmetics, items, etc.)"""
+type Pack {
+  id: ID!
+  parentGame: GameTitle!
+  name: String!
+  description: String
+  type: EntitlementType!
+  price: Price
+  contents: [String]
+}
+
+"""A bundle of games or content offered together"""
+type Bundle {
+  id: ID!
+  name: String!
+  description: String
+  price: Price
+  discount: Discount
+  games: [Game]
+  dlc: [DLC]
+  packs: [Pack]
+  validUntil: DateTime
+}
+
+# ─── Store & Transactions ─────────────────────────────────────────────────────
+
+"""A price value with currency"""
+type Price {
+  amount: Float!
+  currency: Currency!
+  formattedAmount: String
+}
+
+"""A discount applied to a listing"""
+type Discount {
+  id: ID!
+  percentage: Float
+  flatAmount: Float
+  currency: Currency
+  label: String
+  validFrom: DateTime
+  validUntil: DateTime
+}
+
+"""A promotional offer"""
+type Promotion {
+  id: ID!
+  name: String!
+  description: String
+  discounts: [Discount]
+  eligibleListings: [StoreListing]
+  validFrom: DateTime
+  validUntil: DateTime
+}
+
+"""A filter option for store browsing"""
+type StoreFilter {
+  field: String!
+  values: [String!]!
+}
+
+"""A store category"""
+type StoreCategory {
+  id: ID!
+  name: String!
+  slug: String!
+  parentCategory: StoreCategory
+  listingCount: Int
+}
+
+"""A single item listed in the EA store"""
+type StoreListing {
+  id: ID!
+  offerId: String!
+  name: String!
+  description: String
+  coverImage: URL
+  price: Price!
+  originalPrice: Price
+  discount: Discount
+  category: StoreCategory
+  entitlementType: EntitlementType!
+  game: GameTitle
+  platforms: [GamePlatform]
+  tags: [String]
+  availableFrom: DateTime
+  availableUntil: DateTime
+}
+
+"""A single purchase transaction"""
+type Transaction {
+  id: ID!
+  playerId: ID!
+  listing: StoreListing
+  amount: Price!
+  status: String!
+  paymentMethod: String
+  createdAt: DateTime!
+  completedAt: DateTime
+  receiptUrl: URL
+}
+
+"""Purchase history for a player"""
+type PurchaseHistory {
+  playerId: ID!
+  transactions: [Transaction!]!
+  totalSpent: Float
+  currency: Currency
+  count: Int!
+}
+
+# ─── Achievements & Trophies ──────────────────────────────────────────────────
+
+"""Metadata about an achievement"""
+type AchievementDetail {
+  id: ID!
+  game: GameTitle!
+  name: String!
+  description: String
+  iconUrl: URL
+  rarity: String
+  points: Int
+  platform: GamePlatform
+}
+
+"""A player's progress toward an achievement"""
+type AchievementProgress {
+  achievementId: ID!
+  playerId: ID!
+  currentValue: Int
+  targetValue: Int
+  percentComplete: Float
+  updatedAt: DateTime
+}
+
+"""An earned or tracked achievement"""
+type Achievement {
+  id: ID!
+  detail: AchievementDetail!
+  progress: AchievementProgress
+  earnedAt: DateTime
+  isUnlocked: Boolean!
+}
+
+"""A trophy (PlayStation-style) mapped to an EA achievement"""
+type Trophy {
+  id: ID!
+  achievement: Achievement!
+  trophyGrade: String
+  platform: GamePlatform!
+  earnedAt: DateTime
+}
+
+# ─── Leaderboards ─────────────────────────────────────────────────────────────
+
+"""A player's rank in a leaderboard"""
+type Rank {
+  position: Int!
+  tier: String
+  division: String
+  points: Int
+  previousPosition: Int
+}
+
+"""A score value in a leaderboard"""
+type Score {
+  value: Float!
+  unit: String
+  formattedValue: String
+}
+
+"""A single leaderboard entry"""
+type LeaderboardEntry {
+  rank: Rank!
+  player: Player!
+  score: Score!
+  metadata: JSON
+  updatedAt: DateTime!
+}
+
+"""A leaderboard for a game or mode"""
+type Leaderboard {
+  id: ID!
+  game: GameTitle!
+  mode: String
+  region: String
+  season: String
+  entries: [LeaderboardEntry!]!
+  totalEntries: Int!
+  updatedAt: DateTime!
+}
+
+# ─── Statistics & Match History ───────────────────────────────────────────────
+
+"""Generic key-value statistics bag"""
+type Statistics {
+  key: String!
+  value: Float!
+  unit: String
+  label: String
+}
+
+"""Aggregate stats for a game"""
+type GameStatistics {
+  gameId: ID!
+  game: GameTitle!
+  stats: [Statistics!]!
+  season: String
+  updatedAt: DateTime!
+}
+
+"""Per-player per-game statistics"""
+type PlayerStats {
+  playerId: ID!
+  game: GameTitle!
+  stats: [Statistics!]!
+  rank: Rank
+  season: String
+  updatedAt: DateTime!
+}
+
+"""Score outcome for a match"""
+type MatchScore {
+  homeScore: Int
+  awayScore: Int
+  overtime: Boolean
+  penalties: Boolean
+}
+
+"""A participant (player or team) in a match"""
+type MatchParticipant {
+  id: ID!
+  player: Player
+  teamName: String
+  side: String
+  stats: [Statistics]
+  result: MatchResult
+}
+
+"""Detailed data for a single match"""
+type MatchDetail {
+  matchId: ID!
+  gameMode: String
+  map: String
+  duration: Int
+  events: [String]
+  metadata: JSON
+}
+
+"""A single match record"""
+type Match {
+  id: ID!
+  game: GameTitle!
+  playedAt: DateTime!
+  result: MatchResult!
+  score: MatchScore
+  participants: [MatchParticipant!]!
+  detail: MatchDetail
+}
+
+"""Paginated match history for a player"""
+type MatchHistory {
+  playerId: ID!
+  game: GameTitle
+  matches: [Match!]!
+  totalCount: Int!
+  wins: Int
+  losses: Int
+  draws: Int
+}
+
+# ─── FIFA Ultimate Team (FUT) ─────────────────────────────────────────────────
+
+"""A FUT player card"""
+type FUTPlayer {
+  id: ID!
+  commonName: String
+  firstName: String!
+  lastName: String!
+  nationality: String
+  club: String
+  league: String
+  position: String!
+  rating: Int!
+  pace: Int
+  shooting: Int
+  passing: Int
+  dribbling: Int
+  defending: Int
+  physical: Int
+  cardType: String
+  imageUrl: URL
+  rarity: String
+}
+
+"""A FUT squad configuration"""
+type FUTSquad {
+  id: ID!
+  name: String!
+  formation: String!
+  players: [FUTPlayer!]!
+  chemistry: Int
+  rating: Float
+  totalValue: Float
+}
+
+"""A FUT club (the player's club entity in Ultimate Team)"""
+type FUTClub {
+  id: ID!
+  ownerId: ID!
+  clubName: String!
+  badgeId: String
+  kitId: String
+  stadiumId: String
+  squad: FUTSquad
+  coins: Int
+  fcPoints: Int
+  division: String
+  rank: Rank
+}
+
+"""A FUT team (opponent or historical team context)"""
+type FUTTeam {
+  id: ID!
+  name: String!
+  club: FUTClub
+  squad: FUTSquad
+  rating: Float
+}
+
+"""A transfer market listing for a FUT player card"""
+type FUTTransfer {
+  id: ID!
+  player: FUTPlayer!
+  sellerId: ID!
+  startPrice: Int!
+  buyNowPrice: Int
+  currentBid: Int
+  bidCount: Int
+  expiresAt: DateTime!
+  status: String!
+}
+
+"""FUT transfer market surface"""
+type FUTMarket {
+  listings: [FUTTransfer!]!
+  totalListings: Int!
+  filters: [StoreFilter]
+  updatedAt: DateTime!
+}
+
+"""FUT root aggregation type"""
+type FUT {
+  club: FUTClub
+  squad: FUTSquad
+  market: FUTMarket
+  transfers: [FUTTransfer]
+  players: [FUTPlayer]
+}
+
+# ─── Auth & API Access ────────────────────────────────────────────────────────
+
+"""An OAuth 2.0 token issued by EA's auth service"""
+type OAuthToken {
+  tokenType: TokenType!
+  accessToken: String!
+  refreshToken: String
+  expiresIn: Int!
+  scope: [String]
+  issuedAt: DateTime!
+}
+
+"""A session or bearer token"""
+type Token {
+  id: ID!
+  token: String!
+  type: TokenType!
+  expiresAt: DateTime!
+  scopes: [String]
+}
+
+"""An API key for partner integrations"""
+type APIKey {
+  id: ID!
+  name: String!
+  key: String!
+  createdAt: DateTime!
+  expiresAt: DateTime
+  scopes: [String]
+  rateLimit: Int
+  active: Boolean!
+}
+
+# ─── Root Types ───────────────────────────────────────────────────────────────
+
+type Query {
+  """Look up a player by their EA/Nucleus ID"""
+  player(id: ID!): Player
+
+  """Search players by display name"""
+  searchPlayers(displayName: String!, limit: Int): [Player]
+
+  """Get a player's friend list"""
+  friendList(playerId: ID!): FriendList
+
+  """Get a player's presence"""
+  presence(playerId: ID!): Presence
+
+  """List all EA games"""
+  games(platform: GamePlatform, status: GameStatus, limit: Int, offset: Int): [Game]
+
+  """Get a single game by ID"""
+  game(id: ID!): Game
+
+  """List store listings with optional filters"""
+  storeListings(category: String, platform: GamePlatform, limit: Int, offset: Int): [StoreListing]
+
+  """Get a player's entitlements"""
+  entitlements(playerId: ID!): [Entitlement]
+
+  """Get a player's purchase history"""
+  purchaseHistory(playerId: ID!): PurchaseHistory
+
+  """Get achievements for a player and game"""
+  achievements(playerId: ID!, gameId: ID): [Achievement]
+
+  """Get a leaderboard"""
+  leaderboard(gameId: ID!, mode: String, region: String, season: String): Leaderboard
+
+  """Get a player's stats for a game"""
+  playerStats(playerId: ID!, gameId: ID!): PlayerStats
+
+  """Get a player's match history"""
+  matchHistory(playerId: ID!, gameId: ID, limit: Int, offset: Int): MatchHistory
+
+  """Get a specific match by ID"""
+  match(id: ID!): Match
+
+  """Get a player's FUT club"""
+  futClub(playerId: ID!): FUTClub
+
+  """Search the FUT transfer market"""
+  futMarket(position: String, minRating: Int, maxPrice: Int, limit: Int): FUTMarket
+
+  """Get a FUT player card by ID"""
+  futPlayer(id: ID!): FUTPlayer
+}
+
+type Mutation {
+  """Send a friend request"""
+  sendFriendRequest(fromPlayerId: ID!, toPlayerId: ID!): Friend
+
+  """Accept or decline a friend request"""
+  respondToFriendRequest(friendId: ID!, accept: Boolean!): Friend
+
+  """Purchase a store listing"""
+  purchaseListing(playerId: ID!, listingId: ID!, paymentMethod: String!): Transaction
+
+  """Place a bid on a FUT transfer listing"""
+  bidFUTTransfer(playerId: ID!, transferId: ID!, bidAmount: Int!): FUTTransfer
+
+  """List a FUT player card on the transfer market"""
+  listFUTTransfer(playerId: ID!, futPlayerId: ID!, startPrice: Int!, buyNowPrice: Int): FUTTransfer
+
+  """Update squad formation"""
+  updateFUTSquad(playerId: ID!, squadId: ID!, formation: String!): FUTSquad
+}
