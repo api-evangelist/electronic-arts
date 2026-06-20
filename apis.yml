@@ -10,7 +10,7 @@ description: Electronic Arts (EA) is a global leader in digital interactive ente
 kind: contract
 position: Consumer
 access: 3rd-Party
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
 - Gaming
 - Video Games
@@ -30,7 +30,7 @@ apis:
     EA does not publicly publish a developer API portal at this time, so this entry
     is tracked as a Contract-position reference rather than a producer of public APIs.
   humanURL: https://www.ea.com
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   tags:
   - Gaming
   - Video Games
