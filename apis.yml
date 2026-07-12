@@ -49,6 +49,10 @@ maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 common:
+- type: VulnerabilityDisclosure
+  url: security/electronic-arts-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/electronic-arts-domain-security.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/electronic-arts
 - name: Electronic Arts Website
@@ -69,3 +73,5 @@ common:
 - name: EA GitHub Organization
   url: https://github.com/electronicarts
   type: GitHub
+- url: https://www.ea.com/news
+  type: Blog
