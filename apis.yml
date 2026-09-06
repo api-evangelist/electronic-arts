@@ -1,12 +1,15 @@
 aid: electronic-arts
 name: Electronic Arts
-description: Electronic Arts (EA) is a global leader in digital interactive entertainment,
-  developing and delivering games, content, and online services for internet-connected
-  consoles, mobile devices, and personal computers. EA's portfolio includes franchises
-  such as EA SPORTS FC, Madden NFL, Battlefield, The Sims, Apex Legends, and Need
-  for Speed, supported by online services like EA app, EA Play, and Origin. EA does
-  not currently publish a public developer API portal; integrations and data exchanges
-  are handled through partner programs and the EA Help support and account surfaces.
+description: Electronic Arts (EA) is a global leader in digital interactive entertainment, developing
+  and delivering games, content, and online services for internet-connected consoles, mobile devices,
+  and personal computers. EA's portfolio includes franchises such as EA SPORTS FC, Madden NFL, Battlefield,
+  The Sims, Apex Legends, and Need for Speed, supported by online services like the EA app, EA Play, and
+  EA Help. EA runs no public developer portal and publishes no OpenAPI, GraphQL, AsyncAPI or gRPC contract.
+  Its one API programme is the EA SPORTS FC Community API, announced 2026-07-27, which lets a player grant
+  an approved community site (FUT.GG, FUTBIN, FUTWIZ) delegated read access to Ultimate Team data through
+  EA's OAuth flow; EA states it is not accepting further partner requests. The only machine-readable documents
+  EA serves anywhere are the OpenID Connect Discovery and RFC 8414 authorization-server metadata on accounts.ea.com,
+  plus the JWKS they reference.
 kind: contract
 deliveryModel:
   model: unknown
@@ -42,16 +45,16 @@ tags:
 - Player Services
 - Fortune 1000
 created: '2026-03-21'
-modified: '2026-04-28'
+modified: '2026-09-06'
 url: https://raw.githubusercontent.com/api-evangelist/electronic-arts/refs/heads/main/apis.yml
 specificationVersion: '0.23'
 apis:
 - aid: electronic-arts:electronic-arts
   name: Electronic Arts
-  description: Public-facing presence of Electronic Arts. Covers EA's corporate site,
-    consumer game services, EA app, EA Play subscription, and EA Help support surfaces.
-    EA does not publicly publish a developer API portal at this time, so this entry
-    is tracked as a Contract-position reference rather than a producer of public APIs.
+  description: Public-facing presence of Electronic Arts. Covers EA's corporate site, consumer game services,
+    the EA app, EA Play subscription, and EA Help support surfaces. EA does not publish a developer API
+    portal, so this entry is tracked as a Contract-position reference rather than a producer of public
+    APIs; the two entries below carry the surfaces that are actually callable or programme-gated.
   humanURL: https://www.ea.com
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   tags:
@@ -66,8 +69,61 @@ apis:
     url: https://help.ea.com
   - type: Careers
     url: https://www.ea.com/careers
-  - url: graphql/electronic-arts-graphql.md
-    type: GraphQL
+- aid: electronic-arts:ea-account-connect
+  name: EA Account OpenID Connect / OAuth 2.0
+  description: EA's account authorization server at accounts.ea.com — the single identity surface behind
+    the EA app, EA's web properties and the approved EA SPORTS FC Community API partners. EA serves a
+    live OpenID Connect Discovery 1.0 document and RFC 8414 authorization-server metadata here (both fetched
+    2026-09-06, HTTP 200, saved verbatim to well-known/), advertising authorization code with PKCE S256,
+    RS256 ID tokens and the openid/email/phone/profile scope set. Client credentials are issued by EA;
+    there is no public registration endpoint. This is the only machine-readable contract Electronic Arts
+    publishes.
+  humanURL: https://accounts.ea.com/.well-known/openid-configuration
+  baseURL: https://accounts.ea.com/connect
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  tags:
+  - Authentication
+  - OAuth
+  - OpenID Connect
+  - Identity
+  - Gaming
+  properties:
+  - type: OpenIDConnect
+    url: https://accounts.ea.com/.well-known/openid-configuration
+  - type: Authentication
+    url: authentication/electronic-arts-authentication.yml
+  - type: OAuthScopes
+    url: scopes/electronic-arts-scopes.yml
+  - type: WellKnown
+    url: well-known/electronic-arts-well-known.yml
+- aid: electronic-arts:fc-community-api
+  name: EA SPORTS FC Community API
+  description: EA's only API programme, announced 2026-07-27. A player connects their EA Account to an
+    approved community site through EA's OAuth login flow and grants that site permission to make specific
+    requests to FC services on their behalf; the site can then retrieve EA SPORTS FC account data — Ultimate
+    Team players, formations, tactics and more — but never the password or login credentials. Approved
+    partners are FUT.GG, FUTBIN and FUTWIZ, and EA states it is not accepting further requests at this
+    time. Partners may retain pulled account data for at most 28 days. No base URL, endpoint list, scope
+    reference, rate limit or machine-readable spec is published, so no baseURL is recorded here rather
+    than guessing one.
+  humanURL: https://help.ea.com/en/articles/ea-sports-fc/community-api/
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  tags:
+  - Gaming
+  - EA SPORTS FC
+  - Ultimate Team
+  - Partner API
+  - OAuth
+  properties:
+  - type: Documentation
+    url: https://help.ea.com/en/articles/ea-sports-fc/community-api/
+  - name: FC Community API announcement (Pitch Notes, 2026-07-27)
+    type: Blog
+    url: https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update
+  - type: Authentication
+    url: authentication/electronic-arts-authentication.yml
+  - type: Support
+    url: https://help.ea.com
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -95,6 +151,47 @@ common:
   type: Careers
 - name: EA GitHub Organization
   url: https://github.com/electronicarts
-  type: GitHub
+  type: GitHubOrganization
 - url: https://www.ea.com/news
   type: Blog
+- type: WellKnown
+  url: well-known/electronic-arts-well-known.yml
+- type: Authentication
+  url: authentication/electronic-arts-authentication.yml
+- type: OAuthScopes
+  url: scopes/electronic-arts-scopes.yml
+- type: Conformance
+  url: conformance/electronic-arts-conformance.yml
+- type: Conventions
+  url: conventions/electronic-arts-conventions.yml
+- type: Lifecycle
+  url: lifecycle/electronic-arts-lifecycle.yml
+- type: Packages
+  url: packages/electronic-arts-packages.yml
+- type: Plans
+  url: plans/electronic-arts-plans-pricing.yml
+- type: LLMsTxt
+  url: llms/electronic-arts-llms.txt
+- name: EA server status
+  url: https://help.ea.com/en/server-status/
+  type: StatusPage
+- name: EA Online Service Updates (service retirement policy)
+  url: https://www.ea.com/service-updates
+  type: Deprecation
+- name: EA vulnerability disclosure policy
+  url: https://www.ea.com/security/disclosure
+  type: Security
+- name: EA User Agreement
+  url: https://www.ea.com/legal/user-agreement
+  type: TermsOfService
+- name: EA Privacy and Cookie Policy
+  url: https://www.ea.com/legal/privacy-and-cookie-policy
+  type: PrivacyPolicy
+- name: EA Play membership pricing (consumer; no API pricing published)
+  url: https://www.ea.com/ea-play
+  type: Pricing
+x-enrichment:
+  date: '2026-09-06'
+  status: enriched
+  artifacts_added: 11
+  pass: local-v3

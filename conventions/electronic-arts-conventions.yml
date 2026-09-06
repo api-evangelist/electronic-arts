@@ -1,0 +1,114 @@
+generated: '2026-09-06'
+method: probed
+source: >-
+  Derived from the only EA-published machine-readable documents that exist
+  (well-known/electronic-arts-openid-configuration.json,
+  well-known/electronic-arts-oauth-authorization-server.json, both fetched 2026-09-06),
+  from EA's own FC Community API pages
+  (https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update,
+  https://help.ea.com/en/articles/ea-sports-fc/community-api/), and from live responses
+  observed on drop-api.ea.com.
+description: >-
+  Cross-cutting runtime semantics for the EA surfaces an integrator can actually reach.
+  This is a thin profile on purpose: EA publishes no API reference, so almost every
+  convention below is recorded as "not published" with the probe that establishes it,
+  rather than guessed. Nothing here is derived from an OpenAPI, because EA serves none.
+base_url: >-
+  https://accounts.ea.com/connect (identity only, taken from EA's own discovery document).
+  The FC Community API resource server's base URL is NOT published by EA.
+api_style: >-
+  OAuth 2.0 / OpenID Connect over HTTPS for identity. The FC Community API is described by
+  EA only in prose as "specific requests to FC services" made on a player's behalf; its
+  transport, media type and path shape are unpublished.
+authentication:
+  scheme: OAuth 2.0 authorization code (PKCE S256 advertised) / OpenID Connect
+  key_types:
+  - Partner OAuth client (issued by EA, no public registration)
+  - client_certificate_post (mTLS-style client auth, advertised but undocumented)
+  docs: https://accounts.ea.com/.well-known/openid-configuration
+  detail: authentication/electronic-arts-authentication.yml
+consent:
+  model: player-delegated
+  description: >-
+    A player is sent through EA's login flow on accounts.ea.com and asked to grant a named
+    approved site permission to make requests to FC services on their behalf. The partner
+    never receives the password or login credentials.
+  source: https://help.ea.com/en/articles/ea-sports-fc/community-api/
+idempotency:
+  supported: false
+  coverage: none
+  header: null
+  scope: null
+  retention: null
+  note: >-
+    No idempotency mechanism is documented on any EA surface. The only mutating operation
+    an integrator performs is the OAuth authorization code exchange, which RFC 6749 already
+    makes single-use, and the FC Community API is described by EA purely as a data-retrieval
+    grant ("retrieve certain account data"). Recorded as `none` rather than `na` because a
+    consent grant is a state change and no replay protection is published for it.
+reversibility:
+  grade: none
+  note: >-
+    EA states the player "is always in control of whether or not you choose to connect your
+    EA account" and caps partner retention of pulled data at 28 days, but publishes NO
+    documented disconnect operation, no revocation endpoint, and no stated window inside
+    which a granted connection can be withdrawn. The 28-day retention cap is a data-expiry
+    rule, not a reversal path, and is deliberately not graded as one. No window is asserted
+    here that EA does not state.
+  write_surfaces:
+  - operation: EA Account connection (OAuth consent grant to an approved FC community site)
+    action: Grant an approved partner permission to read Ultimate Team account data
+    reversal: none documented
+    window: null
+    grade: none
+    source: https://help.ea.com/en/articles/ea-sports-fc/community-api/
+data_retention:
+  partner_cap_days: 28
+  rule: >-
+    Approved sites may retain pulled account-specific data for up to 28 days; a new pull
+    inside the window resets the 28 days from the new request. Data the player chooses to
+    save on the partner site is then governed by that site's policies, not EA's.
+  source: https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update
+pagination:
+  style: not published
+error_envelope:
+  published: false
+  observed:
+    host: drop-api.ea.com
+    shape: '{"statusCode": <int>, "error": <string>, "message": <string>}'
+    media_type: application/json
+    example_status: 404
+    note: >-
+      Observed on a live anonymous request to https://drop-api.ea.com/openapi.json
+      (HTTP 404) during contract discovery. This is the stock Hapi/Boom envelope, not
+      RFC 9457 application/problem+json, and EA documents no error catalog anywhere. One
+      probed envelope on one host is not an error contract, so no ErrorCatalog artifact or
+      pointer is claimed on the strength of it.
+  observed_oauth:
+    host: accounts.ea.com
+    shape: '{"error": <string>, "error_description": <string>, "code": <int>}'
+    media_type: application/json
+    example_status: 400
+    note: >-
+      Observed on an anonymous GET of https://accounts.ea.com/connect/auth (HTTP 400,
+      2026-09-06): {"error":"invalid_request","error_description":"client_id is missing",
+      "code":101102}. This IS an RFC 6749 section 4.1.2.1 error response, extended with an
+      EA-specific numeric code field. EA publishes no registry of those numeric codes.
+rate_limits:
+  published: false
+  detail: rate-limits/electronic-arts-rate-limits.yml
+versioning:
+  scheme: none published
+  detail: lifecycle/electronic-arts-lifecycle.yml
+request_tracing:
+  published: false
+  note: No request-id or correlation header is documented.
+cross_links:
+  authentication: authentication/electronic-arts-authentication.yml
+  scopes: scopes/electronic-arts-scopes.yml
+  conformance: conformance/electronic-arts-conformance.yml
+  lifecycle: lifecycle/electronic-arts-lifecycle.yml
+  well_known: well-known/electronic-arts-well-known.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

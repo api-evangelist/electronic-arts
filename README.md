@@ -64,42 +64,81 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Electronic Arts (EA) is a global leader in digital interactive entertainment, developing and delivering games, content, and online services for internet-connected consoles, mobile devices, and personal computers. EA's portfolio includes franchises such as EA SPORTS FC, Madden NFL, Battlefield, The Sims, Apex Legends, and Need for Speed, supported by online services like EA app, EA Play, and Origin. EA does not currently publish a public developer API portal; integrations and data exchanges are handled through partner programs and the EA Help support and account surfaces.
+Electronic Arts (EA) is a global leader in digital interactive entertainment, developing and delivering games, content, and online services for internet-connected consoles, mobile devices, and personal computers. EA's portfolio includes franchises such as EA SPORTS FC, Madden NFL, Battlefield, The Sims, Apex Legends, and Need for Speed, supported by online services like the EA app, EA Play, and EA Help.
 
 **URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/electronic-arts/refs/heads/main/apis.yml)
+
+## What Electronic Arts publishes
+
+EA runs no public developer portal and publishes **no OpenAPI, GraphQL SDL, AsyncAPI, gRPC/Protobuf or WSDL contract** on any host. Contract discovery on 2026-09-06 probed `www.ea.com`, `ea.com`, `help.ea.com`, `ir.ea.com`, `api.ea.com`, `gateway.ea.com`, `accounts.ea.com`, `signin.ea.com`, `answers.ea.com` and `drop-api.ea.com`; every result, including the misses, is recorded in `well-known/electronic-arts-well-known.yml`.
+
+Two things EA *does* publish are worth an integrator's attention:
+
+- **EA Account OpenID Connect / OAuth 2.0** — `accounts.ea.com` serves a live OpenID Connect Discovery 1.0 document and RFC 8414 authorization-server metadata (both HTTP 200, `Last-Modified` 2026-09-02), plus the JWKS they reference. These three documents are the only machine-readable contract Electronic Arts publishes anywhere. Saved verbatim under `well-known/`.
+- **EA SPORTS FC Community API** — announced 2026-07-27. A player grants an approved community site delegated read access to Ultimate Team data through EA's OAuth flow. Approved partners are FUT.GG, FUTBIN and FUTWIZ; EA states it is *not accepting further requests*. Partners may retain pulled data for at most 28 days. No base URL, endpoint list, scope reference or spec is published.
+
+## Not published by Electronic Arts
+
+No MCP server, no A2A agent card, no `security.txt`, no `api-catalog`, no `llms.txt` of EA's own, no API SDK on any package registry, no published rate limits, no API pricing, no API changelog, no CLI and no sandbox. EA's Maven Central and NuGet packages (`com.ea.async`, `com.ea.agentloader`, `com.ea.orbit`, `NetTAP`) are first-party engineering libraries, not API clients, and all last shipped between 2016 and 2019.
+
+`graphql/_scaffold/` holds a **conceptual** GraphQL schema written by API Evangelist, not by EA. It was quarantined on 2026-09-06 and its `apis.yml` pointer removed; see `graphql/_scaffold/README.md`.
 
 ## Scope
 
 - **Type:** Contract
-- **Position:** Consumer
+- **Position:** Consuming
 - **Access:** 3rd-Party
 
 ## Tags
 
-- Gaming, Video Games, Entertainment, Consumer, Player Services
+- Gaming, Video Games, Entertainment, Consumer, Player Services, Fortune 1000
 
 ## Timestamps
 
 - **Created:** 2026-03-21
-- **Modified:** 2026-04-28
+- **Modified:** 2026-09-06
 
 ## APIs
 
 ### Electronic Arts
 
-Public-facing presence of Electronic Arts. Covers EA's corporate site, consumer game services, EA app, EA Play subscription, and EA Help support surfaces. EA does not publicly publish a developer API portal at this time, so this entry is tracked as a Contract-position reference rather than a producer of public APIs.
+Public-facing presence of Electronic Arts — corporate site, consumer game services, the EA app, EA Play and EA Help. Tracked as a Contract-position reference rather than a producer of public APIs.
 
 **Human URL:** [https://www.ea.com](https://www.ea.com)
-
-#### Tags
-
-- Gaming, Video Games, Entertainment, Consumer
 
 #### Properties
 
 - [Website](https://www.ea.com)
 - [Support](https://help.ea.com)
 - [Careers](https://www.ea.com/careers)
+
+### EA Account OpenID Connect / OAuth 2.0
+
+EA's account authorization server: authorization code with PKCE S256, RS256 ID tokens, `openid`/`email`/`phone`/`profile` scopes. Client credentials are issued by EA; there is no public registration endpoint.
+
+**Human URL:** [https://accounts.ea.com/.well-known/openid-configuration](https://accounts.ea.com/.well-known/openid-configuration)
+
+**Base URL:** `https://accounts.ea.com/connect`
+
+#### Properties
+
+- [OpenID Connect discovery](https://accounts.ea.com/.well-known/openid-configuration)
+- [Authentication](authentication/electronic-arts-authentication.yml)
+- [OAuth scopes](scopes/electronic-arts-scopes.yml)
+- [Well-known probe](well-known/electronic-arts-well-known.yml)
+
+### EA SPORTS FC Community API
+
+EA's only API programme. Player-delegated OAuth access to Ultimate Team data for three approved community sites; applications closed.
+
+**Human URL:** [https://help.ea.com/en/articles/ea-sports-fc/community-api/](https://help.ea.com/en/articles/ea-sports-fc/community-api/)
+
+#### Properties
+
+- [Documentation](https://help.ea.com/en/articles/ea-sports-fc/community-api/)
+- [Announcement (Pitch Notes, 2026-07-27)](https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update)
+- [Authentication](authentication/electronic-arts-authentication.yml)
+- [Support](https://help.ea.com)
 
 ## Common Properties
 
@@ -109,6 +148,11 @@ Public-facing presence of Electronic Arts. Covers EA's corporate site, consumer 
 - [EA Investor Relations](https://ir.ea.com)
 - [EA Careers](https://www.ea.com/careers)
 - [EA GitHub Organization](https://github.com/electronicarts)
+- [EA server status](https://help.ea.com/en/server-status/)
+- [EA Online Service Updates (service retirement policy)](https://www.ea.com/service-updates)
+- [EA vulnerability disclosure policy](https://www.ea.com/security/disclosure)
+- [EA User Agreement](https://www.ea.com/legal/user-agreement)
+- [EA Privacy and Cookie Policy](https://www.ea.com/legal/privacy-and-cookie-policy)
 
 ## Maintainers
 

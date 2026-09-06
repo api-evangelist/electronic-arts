@@ -1,3 +1,6 @@
+# QUARANTINED 2026-09-06 — authored by API Evangelist, NOT published by Electronic Arts.
+# Conceptual schema; no GraphQL endpoint exists on any EA host. See _scaffold/README.md.
+
 """
 Electronic Arts GraphQL Schema
 Conceptual schema modelling EA's player services, game catalog, storefront,

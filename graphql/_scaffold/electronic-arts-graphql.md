@@ -1,3 +1,6 @@
+<!-- QUARANTINED 2026-09-06: authored by API Evangelist, NOT published by Electronic Arts.
+     Conceptual/derived schema. See graphql/_scaffold/README.md. Do not wire into apis.yml. -->
+
 # Electronic Arts GraphQL Schema
 
 ## Overview

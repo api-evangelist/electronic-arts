@@ -1,0 +1,95 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  Registry metadata endpoints queried 2026-09-06: search.maven.org/solrsearch (Maven Central)
+  and api.nuget.org registration index. npm registry searched for maintainer:electronicarts
+  (0 results). Repositories cross-checked against https://github.com/electronicarts (61
+  public repos).
+provider: Electronic Arts
+providerId: electronic-arts
+summary: >-
+  Electronic Arts ships NO API client library, in any language, on any registry — because
+  it publishes no public API to wrap. What it does publish are first-party engineering
+  libraries: JVM concurrency and agent tooling on Maven Central under com.ea.*, and a .NET
+  test-output parser on NuGet from the Frostbite team. Every one of them is stale: the most
+  recent release in this set is 2019-05-28, and nothing has shipped in over six years.
+sdk_count: 0
+package_count: 5
+packages:
+- name: com.ea.async:ea-async
+  registry: maven
+  url: https://central.sonatype.com/artifact/com.ea.async/ea-async
+  repository: https://github.com/electronicarts/ea-async
+  language: java
+  official: true
+  api_client: false
+  version: 1.2.3
+  published: '2019-05-28'
+  description: >-
+    EA Async implements async-await methods in the JVM. A language/runtime utility, not an
+    API client.
+- name: com.ea.async:ea-async-maven-plugin
+  registry: maven
+  url: https://central.sonatype.com/artifact/com.ea.async/ea-async-maven-plugin
+  repository: https://github.com/electronicarts/ea-async
+  language: java
+  official: true
+  api_client: false
+  version: 1.2.3
+  published: '2019-05-28'
+  description: Build-time instrumentation plugin for EA Async.
+- name: com.ea.agentloader:ea-agent-loader
+  registry: maven
+  url: https://central.sonatype.com/artifact/com.ea.agentloader/ea-agent-loader
+  repository: https://github.com/electronicarts/ea-agent-loader
+  language: java
+  official: true
+  api_client: false
+  version: 1.0.3
+  published: '2017-06-26'
+  description: Utilities for Java agent developers.
+- name: com.ea.orbit:orbit-core
+  registry: maven
+  url: https://central.sonatype.com/artifact/com.ea.orbit/orbit-core
+  repository: https://github.com/orbit/orbit
+  language: java
+  official: true
+  api_client: false
+  version: 0.8.0-preview3
+  published: '2016-03-03'
+  description: >-
+    Orbit virtual-actor framework core. 39 com.ea.orbit artifacts are published on Maven
+    Central; all sit at 0.8.0-preview3 or older, and the project moved out of the
+    electronicarts GitHub org to github.com/orbit.
+- name: NetTAP
+  registry: nuget
+  url: https://www.nuget.org/packages/NetTAP
+  repository: https://github.com/electronicarts/NetTAP
+  language: dotnet
+  official: true
+  api_client: false
+  version: 1.1.0
+  published: '2017-02-10'
+  description: >-
+    TAP (Test Anything Protocol) parser for .NET. NuGet authors field reads "Frostbite SEE
+    Team", which is what establishes first-party authorship.
+absent:
+- registry: npm
+  query: maintainer:electronicarts
+  result: 0 packages
+  note: EA publishes nothing on npm under an EA maintainer account.
+- registry: pypi
+  result: no first-party EA package found
+- registry: rubygems
+  result: no first-party EA package found
+notes:
+- >-
+  No SDKs pointer is wired in apis.yml, deliberately. sdk_count reads client libraries for
+  a provider's API; EA has none, and crediting these engineering libraries as API SDKs
+  would misreport what an integrator can actually pick up.
+- >-
+  The approved FC Community API partners (FUT.GG, FUTBIN, FUTWIZ) are not given a client
+  library either — EA hands them an OAuth flow and nothing else that is public.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

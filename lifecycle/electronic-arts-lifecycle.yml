@@ -1,0 +1,69 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://help.ea.com/en/server-status/ (HTTP 200),
+  https://www.ea.com/service-updates (HTTP 200),
+  https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update (HTTP 200),
+  https://help.ea.com/en/articles/ea-sports-fc/community-api/ (HTTP 200) — all fetched 2026-09-06.
+provider: Electronic Arts
+providerId: electronic-arts
+summary: >-
+  EA publishes a live service-status page and a written online-service retirement policy,
+  both aimed at players rather than at integrators. There is no API version scheme, no
+  deprecation header policy and no SLA for any of the surfaces an integrator would call.
+status_page:
+  url: https://help.ea.com/en/server-status/
+  name: EA server status
+  machine_readable: false
+  note: >-
+    Per-title server status rendered in the EA Help application. No status JSON, RSS or
+    Atom feed and no Statuspage/Better Stack style component API was found.
+deprecation:
+  policy_url: https://www.ea.com/service-updates
+  policy_name: Online Service Shutdown
+  scope: EA game online services, not APIs
+  stated_criteria: >-
+    EA retires the online services for a title when the remaining players fall to
+    "typically fewer than 1% of all peak online players across all EA titles". The policy
+    also covers withdrawal of individual features and modes, and states that where online
+    services end a title may still be playable offline.
+  notice_channel: https://www.ea.com/service-updates
+  sunset_header: not observed
+  deprecation_header: not observed
+  rfc8594: false
+  note: >-
+    This is a genuine, published retirement policy with a stated trigger — but it governs
+    game online services. Nothing EA publishes states a deprecation window, a version
+    support horizon, or a Sunset/Deprecation header contract for the EA Account OAuth
+    endpoints or for the FC Community API.
+versioning:
+  scheme: none published
+  api_versions_observed:
+  - >-
+    accounts.ea.com paths are unversioned (/connect/auth, /connect/token, /connect/userinfo).
+  note: >-
+    No version string appears in any endpoint EA advertises in its discovery documents, and
+    no versioning policy page exists.
+sla:
+  published: false
+  note: No uptime commitment is published for any EA online service or for the FC Community API.
+milestones:
+- date: '2026-07-27'
+  event: >-
+    EA announced the EA SPORTS FC Community API and named FUT.GG, FUTBIN and FUTWIZ as the
+    only authorized partners. Partner applications are explicitly closed: "We are not
+    accepting requests at this time."
+  source: https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update
+- date: '2026-09-02'
+  event: >-
+    Last-Modified on EA's OpenID Connect discovery document at accounts.ea.com, observed on
+    the 2026-09-06 probe — the identity metadata is actively maintained.
+  source: https://accounts.ea.com/.well-known/openid-configuration
+data_retention:
+  rule: >-
+    Approved FC Community API partners may retain pulled account-specific data for up to 28
+    days; a new data pull inside that window resets the 28 days from the time of the new request.
+  source: https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

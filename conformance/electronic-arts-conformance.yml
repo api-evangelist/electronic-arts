@@ -1,0 +1,110 @@
+generated: '2026-09-06'
+method: probed
+source: >-
+  Assertions checked against the documents Electronic Arts actually serves, all fetched
+  2026-09-06: https://accounts.ea.com/.well-known/openid-configuration (200),
+  https://accounts.ea.com/.well-known/oauth-authorization-server (200),
+  https://accounts.ea.com/connect/.well-known/openid-configuration/certs (200), plus
+  negative probes recorded in well-known/electronic-arts-well-known.yml.
+provider: Electronic Arts
+providerId: electronic-arts
+summary: >-
+  EA's conformance surface is entirely an identity surface. It serves both OAuth 2.0
+  authorization-server metadata and OpenID Connect discovery, with PKCE S256 and a live
+  JWKS — and it deviates from both specifications in the same two ways.
+conformance:
+- id: oauth2
+  name: OAuth 2.0 (RFC 6749) authorization code grant
+  conforms: true
+  evidence: https://accounts.ea.com/.well-known/oauth-authorization-server
+  note: >-
+    authorization_endpoint, token_endpoint and the full response_types matrix are declared
+    in served metadata; EA's FC Community API announcement describes the delegated-consent
+    flow in prose. An anonymous GET of https://accounts.ea.com/connect/auth returns
+    HTTP 400 {"error":"invalid_request","error_description":"client_id is missing","code":101102}
+    — an RFC 6749 section 4.1.2.1 error response carrying an EA-specific numeric code, observed
+    2026-09-06.
+- id: rfc8414
+  name: OAuth 2.0 Authorization Server Metadata (RFC 8414)
+  conforms: true
+  evidence: https://accounts.ea.com/.well-known/oauth-authorization-server
+  deviations:
+  - >-
+    issuer is the bare string "accounts.ea.com". RFC 8414 section 2 requires the issuer to
+    be a URL using the https scheme. A strict client that validates iss against the
+    discovery URL will reject EA's tokens.
+- id: oidc
+  name: OpenID Connect Discovery 1.0
+  conforms: true
+  evidence: https://accounts.ea.com/.well-known/openid-configuration
+  deviations:
+  - >-
+    issuer is "accounts.ea.com", not an https URL, as above.
+  - >-
+    token_endpoint is a JSON ARRAY of three URLs
+    (accounts.internal.ea.com, accounts2s.ea.com, accounts.ea.com). OpenID Connect
+    Discovery 1.0 defines token_endpoint as a single URL string. A conforming client that
+    types the field as a string fails to parse EA's document; one that takes element [0]
+    lands on accounts.internal.ea.com, which does not resolve publicly.
+  - >-
+    No registration_endpoint and no end_session_endpoint are advertised.
+- id: rfc7636
+  name: PKCE (RFC 7636)
+  conforms: true
+  evidence: https://accounts.ea.com/.well-known/oauth-authorization-server
+  note: >-
+    code_challenge_methods_supported declares both S256 and plain. S256 is present, which
+    is what the check asks; advertising plain alongside it is discouraged by OAuth 2.0
+    security BCP.
+- id: rfc7517
+  name: JSON Web Key Set (RFC 7517) / RS256 signing
+  conforms: true
+  evidence: https://accounts.ea.com/connect/.well-known/openid-configuration/certs
+  note: Live RSA signing keys with kid, alg RS256 and use sig.
+- id: mtls-client-auth
+  name: Certificate-bound client authentication
+  conforms: true
+  evidence: https://accounts.ea.com/.well-known/openid-configuration
+  note: >-
+    token_endpoint_auth_methods_supported declares client_certificate_post alongside
+    client_secret_post. EA publishes no documentation for it.
+- id: rfc9728
+  name: OAuth 2.0 Protected Resource Metadata (RFC 9728)
+  conforms: false
+  evidence: >-
+    /.well-known/oauth-protected-resource returns 404 on accounts.ea.com and signin.ea.com
+    and is absent from every other EA host probed.
+- id: rfc9116
+  name: security.txt (RFC 9116)
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns 404 on ea.com, www.ea.com, help.ea.com,
+    accounts.ea.com, signin.ea.com and gateway.ea.com. EA runs a vulnerability disclosure
+    programme at https://www.ea.com/security/disclosure but does not advertise it at the
+    RFC 9116 path.
+- id: rfc9457
+  name: Problem Details for HTTP APIs (RFC 9457)
+  conforms: false
+  evidence: >-
+    The only EA-hosted JSON API reachable anonymously, drop-api.ea.com, returns a
+    Hapi/Boom envelope {"statusCode","error","message"} rather than application/problem+json.
+- id: openapi
+  name: OpenAPI description of any EA API
+  conforms: false
+  evidence: >-
+    /openapi.json, /swagger.json, /api-docs and /docs probed on www.ea.com, ea.com,
+    help.ea.com, api.ea.com, gateway.ea.com, accounts.ea.com, signin.ea.com and
+    drop-api.ea.com. No spec is served anywhere.
+domain_standard:
+  applicable: false
+  note: >-
+    Interactive entertainment has no cross-vendor API standard of the kind this check
+    rewards (no SCIM/OData/FHIR/OpenRTB equivalent for player identity, entitlements or
+    match data). Worth recording that EA Advertising, launched 2026, is sold as three
+    direct partnership tiers (Premier, Experience, Franchise) with a contact form and
+    publishes NO programmatic/OpenRTB surface, so even the one EA business line where an
+    industry standard exists does not expose one.
+  evidence: https://www.ea.com/ea-advertising
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

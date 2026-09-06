@@ -4,37 +4,46 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Electronic Arts
 providerId: electronic-arts
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-05'
-reconciled: false
+modified: '2026-09-06'
+method: searched
+source: https://help.ea.com/en/articles/ea-sports-fc/community-api/
+reconciled: true
+limit_count: 0
 tags:
   - Rate Limiting
   - Gaming
   - Entertainment
-description: Electronic Arts does not publish public developer API rate limits. Some EA online-services
-  endpoints (account management, EA app) are internal and reverse-engineered by community projects but
-  not officially supported. Use community-documented numbers at your own risk.
-notes: No officially published rate-limit specification. Treat any inferred limits as best-effort and
-  expect undocumented throttling.
+description: >-
+  Electronic Arts publishes NO rate limits, for any surface. An honest zero: EA's two public
+  API-adjacent surfaces — the EA Account OAuth/OIDC endpoints on accounts.ea.com and the
+  approved-partner FC Community API — carry no documented quota, window, burst allowance or
+  throttling header anywhere on ea.com or help.ea.com. The one limit EA does state for the FC
+  Community API is a data-retention cap, not a request rate: partners may keep pulled account
+  data for at most 28 days.
+notes: >-
+  No X-RateLimit-*, RateLimit-* or Retry-After header contract is documented, and no status
+  code on exhaustion is stated. Community projects that call EA online-services endpoints do so
+  against undocumented, unsupported surfaces; nothing in that space is a published EA limit and
+  none of it is recorded here.
 sources:
-  - https://www.ea.com
-  - https://help.ea.com
-responseCodes:
-  throttled: 429
-  serviceUnavailable: 503
-limits:
-  - name: EA online services (internal)
-    scope: account
-    metric: varies
-    limit: undocumented
+  - url: https://help.ea.com/en/articles/ea-sports-fc/community-api/
+    status: 200
+  - url: https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update
+    status: 200
+  - url: https://accounts.ea.com/.well-known/openid-configuration
+    status: 200
+limits: []
 policies:
-  - name: Backoff
-    description: Implement exponential backoff with jitter and honor Retry-After if returned.
-  - name: Unsupported access
-    description: Public consumers should not rely on EA online endpoints for production integration; partner
-      programs are the only supported channel.
+  - name: Data retention cap (not a rate limit)
+    description: >-
+      Approved FC Community API partners may retain pulled account-specific data for up to 28
+      days; a new pull inside the window resets the 28 days. Recorded here because it is the
+      only quantitative constraint EA publishes on the programme.
+    source: https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update
+  - name: Approved partners only
+    description: >-
+      Only FUT.GG, FUTBIN and FUTWIZ are authorized to call the FC Community API, and EA is not
+      accepting further requests. There is no general-population traffic to limit.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

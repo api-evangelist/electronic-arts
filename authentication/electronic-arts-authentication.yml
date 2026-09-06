@@ -1,0 +1,80 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://accounts.ea.com/.well-known/openid-configuration (HTTP 200) and
+  https://accounts.ea.com/.well-known/oauth-authorization-server (HTTP 200), both fetched
+  2026-09-06 and saved verbatim to well-known/; enriched from EA's own FC Community API
+  announcement at https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update
+  (HTTP 200) and https://help.ea.com/en/articles/ea-sports-fc/community-api/ (HTTP 200).
+provider: Electronic Arts
+providerId: electronic-arts
+summary: >-
+  Electronic Arts publishes no OpenAPI, so this profile is read from the OpenID Connect
+  Discovery and RFC 8414 authorization-server metadata EA actually serves on
+  accounts.ea.com. Every EA integration surface known to be public — the EA app, the
+  approved EA SPORTS FC community partners — authenticates through this one authorization
+  server. There is no public API-key programme and no self-service client registration.
+authorization_server:
+  issuer: accounts.ea.com
+  authorization_endpoint: https://accounts.ea.com/connect/auth
+  token_endpoints:
+  - https://accounts.ea.com/connect/token
+  - https://accounts2s.ea.com/connect/token
+  - https://accounts.internal.ea.com/connect/token
+  userinfo_endpoint: https://accounts.ea.com/connect/userinfo
+  jwks_uri: https://accounts.ea.com/connect/.well-known/openid-configuration/certs
+  id_token_signing_alg_values_supported:
+  - RS256
+  code_challenge_methods_supported:
+  - plain
+  - S256
+  token_endpoint_auth_methods_supported:
+  - client_secret_post
+  - client_certificate_post
+  subject_types_supported:
+  - public
+security_schemes:
+- name: ea_oidc
+  type: openIdConnect
+  openIdConnectUrl: https://accounts.ea.com/.well-known/openid-configuration
+  description: >-
+    EA Account OpenID Connect. Advertises the full response_types matrix
+    (code, token, id_token and every hybrid combination), RS256-signed ID tokens, and the
+    openid/email/phone/profile scope set. Client credentials are issued by EA; there is no
+    public registration endpoint and the discovery document advertises none.
+- name: ea_oauth2_authorization_code
+  type: oauth2
+  flow: authorizationCode
+  authorizationUrl: https://accounts.ea.com/connect/auth
+  tokenUrl: https://accounts.ea.com/connect/token
+  pkce: supported
+  description: >-
+    The delegated-consent flow behind the EA SPORTS FC Community API. EA's own wording:
+    the player completes "a secure EA login flow", is "asked to grant that website
+    permission to make specific requests to FC services on your behalf", and the partner
+    site receives "permissions to make specific API requests" but never the password or
+    login credentials.
+- name: ea_mtls_client
+  type: mutualTLS
+  description: >-
+    client_certificate_post is advertised as a token-endpoint client authentication method
+    alongside client_secret_post, implying certificate-bound partner clients. EA publishes
+    no documentation for it; recorded because the discovery document declares it.
+client_onboarding:
+  self_service: false
+  public_registration_endpoint: false
+  process: >-
+    Partner approval only. EA states plainly on the FC Community API announcement: "We are
+    not accepting requests at this time." The three approved EA SPORTS FC community
+    partners at the time of this probe are FUT.GG, FUTBIN and FUTWIZ.
+  source: https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update
+gaps:
+- >-
+  No public API reference, no scope reference beyond the four OIDC scopes in the discovery
+  document, and no documented base URL for the FC Community API resource server.
+- >-
+  No /.well-known/oauth-protected-resource (RFC 9728) is served on any EA host, so a client
+  cannot discover which resource server the tokens are for.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

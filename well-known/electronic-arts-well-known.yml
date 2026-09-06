@@ -1,0 +1,181 @@
+generated: '2026-09-06'
+method: probed
+source: >-
+  Live HTTPS probes of the RFC 8615 well-known path list against every host this record
+  knows: the registrable domain and www, EA's identity hosts (accounts.ea.com,
+  signin.ea.com), the support/investor hosts, the Akamai API edge (api.ea.com,
+  gateway.ea.com), the community host (answers.ea.com) and the one reachable EA-hosted
+  JSON API host found during contract discovery (drop-api.ea.com).
+provider: Electronic Arts
+providerId: electronic-arts
+summary: >-
+  EA serves NO security.txt, api-catalog, ai-plugin.json or A2A agent card on any host.
+  It DOES serve real OpenID Connect Discovery 1.0 and RFC 8414 OAuth authorization-server
+  metadata on accounts.ea.com (mirrored on signin.ea.com), plus the JWKS those documents
+  point at. Those three documents are the only machine-readable contract Electronic Arts
+  publishes anywhere on its public surface.
+notes:
+  - >-
+    ir.ea.com answers HTTP 200 with the same ~475KB HTML single-page-app shell for every
+    /.well-known/* path probed. That is a catch-all, not a document; every ir.ea.com row
+    below is recorded as a MISS despite the 200.
+  - >-
+    api.ea.com and gateway.ea.com are Akamai edge hostnames that CNAME to the www.ea.com
+    property; api.ea.com answers 400 "Invalid URL" to every path, so nothing is served there.
+  - >-
+    answers.ea.com (EA Forums, hosted on Khoros/Lithium behind Cloudflare) answered a
+    "Just a moment..." bot interstitial (403) to every probe. Not evaluated.
+hosts:
+- host: accounts.ea.com
+  role: EA Account identity / OAuth authorization server
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: application/json
+    file: electronic-arts-openid-configuration.json
+    last_modified: 'Wed, 02 Sep 2026 05:22:05 GMT'
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: electronic-arts-oauth-authorization-server.json
+  - path: /connect/.well-known/openid-configuration/certs
+    status: 200
+    content_type: application/json
+    file: electronic-arts-jwks.json
+    note: JWKS referenced by jwks_uri in both discovery documents above.
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: signin.ea.com
+  role: EA Account sign-in front end (serves the same discovery documents)
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: application/json
+    note: Byte-identical to the accounts.ea.com document; not saved twice.
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    note: Byte-identical to the accounts.ea.com document; not saved twice.
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: www.ea.com
+  role: Corporate and consumer website
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/agent.json
+    status: 403
+  - path: /llms.txt
+    status: 404
+- host: ea.com
+  role: Registrable domain (same origin as www)
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/agent.json
+    status: 403
+- host: help.ea.com
+  role: EA Help support surface
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 500
+- host: ir.ea.com
+  role: Investor relations
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    note: MISS — HTML single-page-app shell, not a document.
+  - path: /.well-known/api-catalog
+    status: 200
+    note: MISS — HTML single-page-app shell, not a document.
+  - path: /.well-known/agent-card.json
+    status: 200
+    note: MISS — HTML single-page-app shell, not a document.
+  - path: /.well-known/agent.json
+    status: 200
+    note: MISS — HTML single-page-app shell, not a document.
+- host: gateway.ea.com
+  role: Akamai edge hostname
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: api.ea.com
+  role: Akamai edge hostname (CNAME to www.ea.com); serves nothing
+  documents:
+  - path: /.well-known/security.txt
+    status: 400
+  - path: /.well-known/openid-configuration
+    status: 400
+  - path: /.well-known/agent-card.json
+    status: 400
+  - path: /.well-known/agent.json
+    status: 400
+- host: drop-api.ea.com
+  role: EA-hosted JSON API host observed during contract discovery
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 404
+    note: >-
+      404 body is a JSON envelope {"statusCode":404,"error":"Not Found","message":"Cannot GET ..."},
+      confirming a live JSON service rather than a CDN catch-all. No spec is served here.
+- host: answers.ea.com
+  role: EA Forums (Khoros, behind Cloudflare)
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    note: Cloudflare bot interstitial answered instead of the origin; not evaluated.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

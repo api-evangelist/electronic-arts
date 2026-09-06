@@ -1,0 +1,63 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  scopes_supported in https://accounts.ea.com/.well-known/openid-configuration (HTTP 200,
+  fetched 2026-09-06, saved verbatim to well-known/electronic-arts-openid-configuration.json).
+  No scope reference page is published by EA; searched www.ea.com, help.ea.com and the FC
+  Community API announcement and none exists.
+provider: Electronic Arts
+providerId: electronic-arts
+authorization_server: https://accounts.ea.com/connect/auth
+scope_count: 4
+scopes:
+- name: openid
+  description: >-
+    OpenID Connect authentication. Required to receive an RS256-signed ID token from
+    accounts.ea.com. Description is the OIDC Core 1.0 definition; EA publishes none of its own.
+  source: discovery document
+- name: email
+  description: >-
+    Releases the email and email_verified claims, both of which are listed in
+    claims_supported.
+  source: discovery document
+- name: phone
+  description: >-
+    Releases the phone_number and phone_number_verified claims, both listed in
+    claims_supported.
+  source: discovery document
+- name: profile
+  description: >-
+    Releases the profile claims EA lists in claims_supported: name, given_name, family_name,
+    gender, locale and auth_time.
+  source: discovery document
+claims_supported:
+- sub
+- aud
+- exp
+- iat
+- iss
+- email
+- email_verified
+- family_name
+- given_name
+- gender
+- auth_time
+- locale
+- name
+- phone_number
+- phone_number_verified
+- c_hash
+- at_hash
+notes:
+- >-
+  These four are the IDENTITY scopes only. The EA SPORTS FC Community API grants partners
+  permission to read Ultimate Team data — "players, formations, tactics, and more" in EA's
+  own words — and whatever scope strings carry that grant are NOT published in the discovery
+  document or anywhere else on EA's public surface.
+- >-
+  A consent screen exists (EA: "You'll be asked to grant that website permission to make
+  specific requests to FC services on your behalf") but its scope labels are visible only
+  to approved partners' users.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

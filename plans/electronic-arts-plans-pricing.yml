@@ -4,46 +4,38 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Electronic Arts
 providerId: electronic-arts
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-05'
-reconciled: false
+modified: '2026-09-06'
+method: searched
+source: https://www.ea.com/ea-play
+reconciled: true
+plan_count: 2
 tags:
   - Gaming
   - Entertainment
   - Consumer
   - Subscription
-description: Electronic Arts (EA) does not publish a public developer API portal. Consumer-facing pricing
-  is for the EA Play subscription tiers, not a developer API. Plans below capture the consumer EA Play
-  subscription as the only documented commercial offering directly tied to EA's online services.
+description: >-
+  Electronic Arts sells NO API plan. Its only API programme, the EA SPORTS FC Community API
+  (launched 2026-07-27), is a closed partner arrangement with three named community sites and
+  carries no published price, quota or tier of any kind — EA states outright that it is "not
+  accepting requests at this time". The two plans below are the consumer EA Play membership
+  tiers, read live from EA's pricing page on 2026-09-06 and recorded so the commercial surface
+  is not blank; they are subscription products, not developer plans.
 sources:
-  - https://www.ea.com/ea-play
-  - https://www.ea.com
+  - url: https://www.ea.com/ea-play
+    status: 200
+    note: 'Verbatim on page: "EA Play is just $5.99 a month or $39.99 for a full year." and "$16.99 a month or $119.99 for a full year."'
+  - url: https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update
+    status: 200
+    note: FC Community API announcement — no pricing, no self-serve access, applications closed.
 plans:
-  - id: electronic-arts-no-public-api
-    name: No Public Developer API
-    type: enterprise
-    description: EA does not currently expose a public developer API. Partner integrations are negotiated
-      directly with EA business development; no published per-call pricing.
-    entries:
-      - label: Partner integration
-        name: enterprise_custom
-        type: subscription
-        metric: contract
-        limit: -1
-        timeFrame: month
-        geo: configurable
-        unit: 1
-        price: contact partner team
-        userMultiplied: false
-    elements:
-      - name: Partner-only integration
   - id: electronic-arts-ea-play
     name: EA Play (Consumer)
     type: subscription
-    description: Consumer subscription that bundles EA games and online services. Listed for completeness;
-      not a developer API plan.
+    description: >-
+      Consumer membership: game library with add-ons, up to 10 hours of trials of select new
+      games before launch, 10% savings on EA digital purchases, member-only in-game rewards.
+      One platform per membership. Not a developer API plan.
     entries:
       - label: EA Play monthly
         name: ea_play_monthly
@@ -54,6 +46,7 @@ plans:
         geo: US
         unit: 1
         price: '5.99'
+        currency: USD
         userMultiplied: true
       - label: EA Play yearly
         name: ea_play_yearly
@@ -64,7 +57,21 @@ plans:
         geo: US
         unit: 1
         price: '39.99'
+        currency: USD
         userMultiplied: true
+    elements:
+      - name: Game library access
+      - name: Member rewards
+      - name: Up to 10 hours of early trials
+      - name: 10% savings on EA digital purchases
+  - id: electronic-arts-ea-play-pro
+    name: EA Play Pro (Consumer)
+    type: subscription
+    description: >-
+      Consumer membership: unlimited access to premium editions of the latest games, select
+      new releases on day one, 10% savings on EA digital purchases, monthly in-game rewards.
+      Not a developer API plan.
+    entries:
       - label: EA Play Pro monthly
         name: ea_play_pro_monthly
         type: subscription
@@ -74,11 +81,29 @@ plans:
         geo: US
         unit: 1
         price: '16.99'
+        currency: USD
+        userMultiplied: true
+      - label: EA Play Pro yearly
+        name: ea_play_pro_yearly
+        type: subscription
+        metric: year
+        limit: -1
+        timeFrame: year
+        geo: US
+        unit: 1
+        price: '119.99'
+        currency: USD
         userMultiplied: true
     elements:
-      - name: Game library access
-      - name: Member rewards
-      - name: Early trials of new releases (Pro)
+      - name: Premium editions of latest games
+      - name: Select new releases day one
+      - name: Monthly in-game rewards
+      - name: 10% savings on EA digital purchases
+api_plans:
+  count: 0
+  note: >-
+    No paid, metered or free-tier API plan is published by Electronic Arts. FC Community API
+    access is granted by approval to named partners only.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
