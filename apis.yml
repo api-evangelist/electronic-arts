@@ -83,6 +83,11 @@ apis:
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   tags:
   - Authentication
+  - OpenID Connect
+  - Identity
+  - Gaming
+  tags_raw:
+  - Authentication
   - OAuth
   - OpenID Connect
   - Identity
@@ -109,6 +114,12 @@ apis:
   humanURL: https://help.ea.com/en/articles/ea-sports-fc/community-api/
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   tags:
+  - Gaming
+  - EA SPORTS FC
+  - Ultimate Team
+  - Partner API
+  - Authentication
+  tags_raw:
   - Gaming
   - EA SPORTS FC
   - Ultimate Team
