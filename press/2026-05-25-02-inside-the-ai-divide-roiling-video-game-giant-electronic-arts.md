@@ -1,7 +1,9 @@
 ---
 title: Inside the AI divide roiling video game giant Electronic Arts
 url: https://www.businessinsider.com/inside-ai-divide-roiling-video-game-giant-electronic-arts-2025-10
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"Electronic Arts" press release artificial intelligence'
 position: 2
 source: serpapi-google

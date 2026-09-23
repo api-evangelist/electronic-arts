@@ -1,7 +1,9 @@
 ---
 title: EA and Stability AI partner to empower artists, designers, ...
 url: https://www.ea.com/news/ea-partners-with-stability-ai
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"Electronic Arts" press release artificial intelligence'
 position: 1
 source: serpapi-google
