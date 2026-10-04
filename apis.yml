@@ -50,6 +50,7 @@ url: https://raw.githubusercontent.com/api-evangelist/electronic-arts/refs/heads
 specificationVersion: '0.23'
 apis:
 - aid: electronic-arts:electronic-arts
+  x-published: false
   name: Electronic Arts
   description: Public-facing presence of Electronic Arts. Covers EA's corporate site, consumer game services,
     the EA app, EA Play subscription, and EA Help support surfaces. EA does not publish a developer API
