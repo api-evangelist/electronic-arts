@@ -140,6 +140,10 @@ maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 common:
+- type: RateLimits
+  url: rate-limits/electronic-arts-rate-limits.yml
+- type: FinOps
+  url: finops/electronic-arts-finops.yml
 - type: VulnerabilityDisclosure
   url: security/electronic-arts-vulnerability-disclosure.yml
 - type: DomainSecurity
