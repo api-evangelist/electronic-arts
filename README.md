@@ -1,4 +1,4 @@
-# Electronic Arts (electronic-arts)
+# Electronic Arts
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,98 +64,119 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Electronic Arts (EA) is a global leader in digital interactive entertainment, developing and delivering games, content, and online services for internet-connected consoles, mobile devices, and personal computers. EA's portfolio includes franchises such as EA SPORTS FC, Madden NFL, Battlefield, The Sims, Apex Legends, and Need for Speed, supported by online services like the EA app, EA Play, and EA Help.
+Electronic Arts (EA) is a global leader in digital interactive entertainment, developing and delivering games, content, and online services for internet-connected consoles, mobile devices, and personal computers. EA's portfolio includes franchises such as EA SPORTS FC, Madden NFL, Battlefield, The Sims, Apex Legends, and Need for Speed, supported by online services like the EA app, EA Play, and EA Help. EA runs no public developer portal and publishes no OpenAPI, GraphQL, AsyncAPI or gRPC contract. Its one API programme is the EA SPORTS FC Community API, announced 2026-07-27, which lets a player grant an approved community site (FUT.GG, FUTBIN, FUTWIZ) delegated read access to Ultimate Team data through EA's OAuth flow; EA states it is not accepting further partner requests. The only machine-readable documents EA serves anywhere are the OpenID Connect Discovery and RFC 8414 authorization-server metadata on accounts.ea.com, plus the JWKS they reference.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/electronic-arts/refs/heads/main/apis.yml)
+**Areas:** Gaming · Video Games · Entertainment · Consumer · Player Services · Fortune 1000
 
-## What Electronic Arts publishes
+## Electronic Arts on APIs.io
 
-EA runs no public developer portal and publishes **no OpenAPI, GraphQL SDL, AsyncAPI, gRPC/Protobuf or WSDL contract** on any host. Contract discovery on 2026-09-06 probed `www.ea.com`, `ea.com`, `help.ea.com`, `ir.ea.com`, `api.ea.com`, `gateway.ea.com`, `accounts.ea.com`, `signin.ea.com`, `answers.ea.com` and `drop-api.ea.com`; every result, including the misses, is recorded in `well-known/electronic-arts-well-known.yml`.
+Everything profiled for Electronic Arts is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/electronic-arts/](https://apis.io/providers/electronic-arts/)** — or go straight to one of the APIs or properties below.
 
-Two things EA *does* publish are worth an integrator's attention:
+### APIs (3)
 
-- **EA Account OpenID Connect / OAuth 2.0** — `accounts.ea.com` serves a live OpenID Connect Discovery 1.0 document and RFC 8414 authorization-server metadata (both HTTP 200, `Last-Modified` 2026-09-02), plus the JWKS they reference. These three documents are the only machine-readable contract Electronic Arts publishes anywhere. Saved verbatim under `well-known/`.
-- **EA SPORTS FC Community API** — announced 2026-07-27. A player grants an approved community site delegated read access to Ultimate Team data through EA's OAuth flow. Approved partners are FUT.GG, FUTBIN and FUTWIZ; EA states it is *not accepting further requests*. Partners may retain pulled data for at most 28 days. No base URL, endpoint list, scope reference or spec is published.
+- [Electronic Arts](https://apis.io/apis/electronic-arts/electronic-arts/) — Public-facing presence of Electronic Arts. Covers EA's corporate site, consumer game services, the EA app, EA Play subscription, and EA Help support…
+- [EA Account OpenID Connect / OAuth 2.0](https://apis.io/apis/electronic-arts/ea-account-connect/) — EA's account authorization server at accounts.ea.com — the single identity surface behind the EA app, EA's web properties and the approved EA SPORTS FC…
+- [EA SPORTS FC Community API](https://apis.io/apis/electronic-arts/fc-community-api/) — EA's only API programme, announced 2026-07-27. A player connects their EA Account to an approved community site through EA's OAuth login flow and grants…
 
-## Not published by Electronic Arts
+### Published properties
 
-No MCP server, no A2A agent card, no `security.txt`, no `api-catalog`, no `llms.txt` of EA's own, no API SDK on any package registry, no published rate limits, no API pricing, no API changelog, no CLI and no sandbox. EA's Maven Central and NuGet packages (`com.ea.async`, `com.ea.agentloader`, `com.ea.orbit`, `NetTAP`) are first-party engineering libraries, not API clients, and all last shipped between 2016 and 2019.
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-`graphql/_scaffold/` holds a **conceptual** GraphQL schema written by API Evangelist, not by EA. It was quarantined on 2026-09-06 and its `apis.yml` pointer removed; see `graphql/_scaffold/README.md`.
+#### Security (3)
 
-## Scope
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Type:** Contract
-- **Position:** Consuming
-- **Access:** 3rd-Party
+- [Electronic Arts Authentication](https://apis.io/security/electronic-arts/electronic-arts-authentication/)
+- [Electronic Arts Domain Security](https://apis.io/security/electronic-arts/electronic-arts-domain-security/)
+- [Electronic Arts Vulnerability Disclosure](https://apis.io/security/electronic-arts/electronic-arts-vulnerability-disclosure/)
 
-## Tags
+#### OAuth scopes (1)
 
-- Gaming, Video Games, Entertainment, Consumer, Player Services, Fortune 1000
+The permissions the API asks for.
 
-## Timestamps
+- [Electronic Arts Scopes](https://apis.io/scopes/electronic-arts/electronic-arts-scopes/)
 
-- **Created:** 2026-03-21
-- **Modified:** 2026-09-06
+#### Plans and pricing (1)
 
-## APIs
+Published plans, tiers and prices.
 
-### Electronic Arts
+- [Electronic Arts Plans Pricing](https://apis.io/plans/electronic-arts/electronic-arts-plans-pricing/)
 
-Public-facing presence of Electronic Arts — corporate site, consumer game services, the EA app, EA Play and EA Help. Tracked as a Contract-position reference rather than a producer of public APIs.
+#### Rate limits (1)
 
-**Human URL:** [https://www.ea.com](https://www.ea.com)
+Published request limits.
 
-#### Properties
+- [Electronic Arts Rate Limits](https://apis.io/rate-limits/electronic-arts/electronic-arts-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Electronic Arts Finops](https://apis.io/finops/electronic-arts/electronic-arts-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.ea.com)
+- [Pricing](https://www.ea.com/ea-play)
 - [Support](https://help.ea.com)
-- [Careers](https://www.ea.com/careers)
+- [Blog](https://www.ea.com/news)
+- [Security](https://www.ea.com/security/disclosure)
+- [Terms of service](https://www.ea.com/legal/user-agreement)
+- [Privacy policy](https://www.ea.com/legal/privacy-and-cookie-policy)
+- [GitHub](https://github.com/electronicarts)
+- [Status](https://help.ea.com/en/server-status/)
 
-### EA Account OpenID Connect / OAuth 2.0
+## API Evangelist rating
 
-EA's account authorization server: authorization code with PKCE S256, RS256 ID tokens, `openid`/`email`/`phone`/`profile` scopes. Client credentials are issued by EA; there is no public registration endpoint.
+**Kin Score 32.1** — thin · rubric 0.24.0 · scored 2026-10-17
 
-**Human URL:** [https://accounts.ea.com/.well-known/openid-configuration](https://accounts.ea.com/.well-known/openid-configuration)
+| Facet | Score |
+|---|---|
+| Discoverability | 62.5 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 39.5 |
+| Developer ergonomics | 21.4 |
+| Access clarity | 52.6 |
 
-**Base URL:** `https://accounts.ea.com/connect`
+**Agent readiness 9.0** — agent-aware
 
-#### Properties
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
 
-- [OpenID Connect discovery](https://accounts.ea.com/.well-known/openid-configuration)
-- [Authentication](authentication/electronic-arts-authentication.yml)
-- [OAuth scopes](scopes/electronic-arts-scopes.yml)
-- [Well-known probe](well-known/electronic-arts-well-known.yml)
+**Regulatory alignment 40.2** — Horizontal (data, software, accessibility, platform)
 
-### EA SPORTS FC Community API
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/electronic-arts/](https://apis.io/providers/electronic-arts/).
 
-EA's only API programme. Player-delegated OAuth access to Ultimate Team data for three approved community sites; applications closed.
+## How this profile is made
 
-**Human URL:** [https://help.ea.com/en/articles/ea-sports-fc/community-api/](https://help.ea.com/en/articles/ea-sports-fc/community-api/)
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
 
-#### Properties
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Electronic Arts: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
 
-- [Documentation](https://help.ea.com/en/articles/ea-sports-fc/community-api/)
-- [Announcement (Pitch Notes, 2026-07-27)](https://www.ea.com/games/ea-sports-fc/fc-26/news/pitch-notes-fc26-community-api-update)
-- [Authentication](authentication/electronic-arts-authentication.yml)
-- [Support](https://help.ea.com)
+## Open an issue
 
-## Common Properties
-
-- [Electronic Arts Website](https://www.ea.com)
-- [EA Help](https://help.ea.com)
-- [EA Play](https://www.ea.com/ea-play)
-- [EA Investor Relations](https://ir.ea.com)
-- [EA Careers](https://www.ea.com/careers)
-- [EA GitHub Organization](https://github.com/electronicarts)
-- [EA server status](https://help.ea.com/en/server-status/)
-- [EA Online Service Updates (service retirement policy)](https://www.ea.com/service-updates)
-- [EA vulnerability disclosure policy](https://www.ea.com/security/disclosure)
-- [EA User Agreement](https://www.ea.com/legal/user-agreement)
-- [EA Privacy and Cookie Policy](https://www.ea.com/legal/privacy-and-cookie-policy)
-
-## Maintainers
-
-**FN:** Kin Lane
-
-**Email:** kin@apievangelist.com
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/electronic-arts/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
