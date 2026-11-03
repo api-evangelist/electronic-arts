@@ -23,16 +23,23 @@ deliveryModel:
   generated: '2026-08-28'
   method: derived
 accessModel:
-  pricing: freemium
-  onboarding: approval
+  pricing: paid
+  onboarding: open
   trial: false
   try_now: false
-  public: false
-  label: Freemium · Requires approval
-  confidence: medium
+  public: true
+  gated: none
+  gated_source:
+  - onboarding
+  label: Paid · Open access
+  confidence: high
   source:
   - plans
-  generated: '2026-07-22'
+  - authentication
+  - scopes
+  - rate-limits
+  - security
+  generated: '2026-11-02'
   method: derived
 position: Consuming
 access: 3rd-Party
