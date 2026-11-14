@@ -39,7 +39,7 @@ accessModel:
   - scopes
   - rate-limits
   - security
-  generated: '2026-11-06'
+  generated: '2026-11-13'
   method: derived
 position: Consuming
 access: 3rd-Party
@@ -216,6 +216,14 @@ common:
 - name: EA Play membership pricing (consumer; no API pricing published)
   url: https://www.ea.com/ea-play
   type: Pricing
+- type: UsageTerms
+  url: terms/electronic-arts-terms-of-service.yml
+- type: DataProcessing
+  url: privacy/electronic-arts-privacy-policy.yml
+- type: Eligibility
+  url: eligibility/electronic-arts-eligibility.yml
+- type: DataLicense
+  url: data-license/electronic-arts-data-license.yml
 x-enrichment:
   date: '2026-09-06'
   status: enriched
