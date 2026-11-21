@@ -39,7 +39,7 @@ accessModel:
   - scopes
   - rate-limits
   - security
-  generated: '2026-11-13'
+  generated: '2026-11-20'
   method: derived
 position: Consuming
 access: 3rd-Party
